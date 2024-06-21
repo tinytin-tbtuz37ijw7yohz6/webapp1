@@ -17,8 +17,8 @@ def run_shell_command(command, output_queue):
 def install_and_run_tmate(output_queue):
     output_queue.put("Updating system and installing tmate...")
     
-    update_command = "sudo apt update"
-    install_command = "sudo apt install tmate -y"
+    update_command = "apt update"
+    install_command = "apt install tmate -y"
     
     run_shell_command(update_command, output_queue)
     run_shell_command(install_command, output_queue)
