@@ -5,27 +5,41 @@ import time
 
 # Function to run shell commands
 def run_shell_command(command):
-    process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    output, error = process.communicate()
-    return output, error
+    try:
+        process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        output, error = process.communicate()
+        return output.decode(), error.decode()
+    except Exception as e:
+        return "", str(e)
 
 # Function to install tmate and run it
 def install_and_run_tmate():
     st.write("Updating system and installing tmate...")
-    update_command = "sudo apt update && sudo apt install tmate -y"
-    output, error = run_shell_command(update_command)
-    st.write("System Update and tmate Installation Output:")
-    st.text(output.decode())
-    st.write("System Update and tmate Installation Error (if any):")
-    st.text(error.decode())
+    update_command = "sudo apt update"
+    install_command = "sudo apt install tmate -y"
+    
+    update_output, update_error = run_shell_command(update_command)
+    st.write("System Update Output:")
+    st.text(update_output)
+    if update_error:
+        st.write("System Update Error:")
+        st.text(update_error)
+    
+    install_output, install_error = run_shell_command(install_command)
+    st.write("tmate Installation Output:")
+    st.text(install_output)
+    if install_error:
+        st.write("tmate Installation Error:")
+        st.text(install_error)
 
     st.write("Running tmate...")
     tmate_command = "tmate"
-    output, error = run_shell_command(tmate_command)
+    tmate_output, tmate_error = run_shell_command(tmate_command)
     st.write("tmate Output:")
-    st.text(output.decode())
-    st.write("tmate Error (if any):")
-    st.text(error.decode())
+    st.text(tmate_output)
+    if tmate_error:
+        st.write("tmate Error:")
+        st.text(tmate_error)
 
 # Function to manage the running time of the app
 def manage_runtime(duration_in_seconds):
